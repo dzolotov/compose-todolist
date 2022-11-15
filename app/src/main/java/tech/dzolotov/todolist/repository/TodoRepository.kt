@@ -5,17 +5,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.core.component.KoinComponent
 
-data class Task(var id:Int, var name: String, var completed: Boolean)
+data class Task(var id: Int, var name: String, var completed: Boolean)
 
 interface ITodoRepository {
 
     fun getState(): StateFlow<List<Task>>
 
-    fun add(name:String)
-    fun remove(id:Int)
-    fun complete(id:Int)
-    fun uncomplete(id:Int)
-    fun getTasks():List<Task>
+    fun add(name: String)
+    fun remove(id: Int)
+    fun complete(id: Int)
+    fun uncomplete(id: Int)
+    fun getTasks(): List<Task>
     suspend fun load()
 }
 
@@ -53,5 +53,6 @@ class TodoRepository(val dataSource: DataSource) : ITodoRepository, KoinComponen
         dataSource.addTask("Sample task 1")
         dataSource.addTask("Sample task 2")
         dataSource.addTask("Sample task 3")
+        stateFlow.value = dataSource.getTasks()
     }
 }

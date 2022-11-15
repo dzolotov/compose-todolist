@@ -25,7 +25,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.getViewModel
 import tech.dzolotov.todolist.repository.ITodoRepository
@@ -51,10 +50,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TodoListApp() {
-//    val viewModel = getViewModel<MainViewModel>()
-//    LaunchedEffect(Unit) {
-//        viewModel.loadData()
-//    }
+    val viewModel = getViewModel<MainViewModel>()
+    LaunchedEffect(Unit) {
+        viewModel.loadData()
+    }
     Column {
         Text(
             "Todo List",

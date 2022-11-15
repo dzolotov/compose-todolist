@@ -31,6 +31,10 @@ import tech.dzolotov.todolist.repository.ITodoRepository
 import tech.dzolotov.todolist.repository.Task
 import tech.dzolotov.todolist.ui.theme.TodolistTheme
 
+//class CommonData(val appName: String)
+//val CommonDataProvider = compositionLocalOf { CommonData("Unknown app") }
+//CompositionLocalProvider(CommonDataProvider provides CommonData("ToDo List")) {
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +55,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TodoListApp() {
     val viewModel = getViewModel<MainViewModel>()
-    LaunchedEffect(Unit) {
-        viewModel.loadData()
-    }
+//    LaunchedEffect(Unit) {
+//        viewModel.loadData()
+//    }
     Column {
         Text(
-            "Todo List",
+//            CommonDataProvider.current.appName,
+            "ToDo List",
             modifier = Modifier
                 .semantics {
                     contentDescription = "Header"

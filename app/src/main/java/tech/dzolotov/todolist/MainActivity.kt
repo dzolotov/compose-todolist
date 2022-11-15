@@ -1,6 +1,5 @@
 package tech.dzolotov.todolist
 
-import MemoryDataSource
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,24 +10,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.getViewModel
+import tech.dzolotov.todolist.repository.ITodoRepository
 import tech.dzolotov.todolist.repository.Task
-import tech.dzolotov.todolist.repository.TodoRepository
 import tech.dzolotov.todolist.ui.theme.TodolistTheme
 
-val repository = TodoRepository(MemoryDataSource())
-
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -46,18 +51,30 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TodoListApp() {
+//    val viewModel = getViewModel<MainViewModel>()
+//    LaunchedEffect(Unit) {
+//        viewModel.loadData()
+//    }
     Column {
         Text(
-            "Todo List", modifier = Modifier
+            "Todo List",
+            modifier = Modifier
+                .semantics {
+                    contentDescription = "Header"
+                    testTag = "header"
+                }
                 .padding(bottom = 12.dp)
-                .align(Alignment.CenterHorizontally), fontSize = 32.sp
-        )
+                .align(Alignment.CenterHorizontally),
+            fontSize = 32.sp,
+
+            )
         TaskList()
     }
 }
 
 @Composable
 fun TaskList() {
+    val repository = get<ITodoRepository>()
     val tasks by repository.getState().collectAsState()
     LazyColumn {
         this.items(tasks) {
@@ -72,6 +89,8 @@ fun TaskList() {
 
 @Composable
 fun TaskComposable(task: Task) {
+    val repository = get<ITodoRepository>()
+
     var alertDialogVisible by remember { mutableStateOf(false) }
     if (alertDialogVisible) {
         AlertDialog(onDismissRequest = {
@@ -126,6 +145,8 @@ fun TaskComposable(task: Task) {
 
 @Composable
 fun NewTask() {
+    val repository = get<ITodoRepository>()
+
     var name by remember { mutableStateOf("") }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         BasicTextField(
